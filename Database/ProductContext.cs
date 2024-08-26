@@ -10,7 +10,7 @@ namespace Stx.Database;
 public class ProductContext : DbContext
 {
     public DbSet<Product> Product { get; set; }
-    public DbSet<ProductHistory> ProductHistory { get; set; }
+    public DbSet<ProductPriceHistory> ProductPriceHistory { get; set; }
     public string ConnectionString { get; set; }
     public ProductContext()
     {

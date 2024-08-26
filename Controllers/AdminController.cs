@@ -23,7 +23,26 @@ namespace Stx.Controllers
             using var db = new ProductContext();
             db.Database.EnsureDeleted();
             db.Database.Migrate();
-            var chunkSize = 2;
+            ;
+            for (int i = 1; i <= productCount; i++)
+            {
+                var p = RandomProduct.GenerateProduct(i, productCount);
+                db.Add(p);
+            }
+            db.SaveChanges();
+            ;
+            for (int i = 1; i <= 1000; i++)
+            {
+                using var db2 = new ProductContext();
+                for (int productNumber = 1; productNumber <= productCount; productNumber++)
+                {
+                    var pph = RandomProduct.GenerateProductPriceHistory(productNumber, i, productNumber);
+                    db2.Add(pph);
+                }
+                db2.SaveChanges();
+                    
+            }
+            /*var chunkSize = 2;
             for (int j = 0; j < productCount / chunkSize; j++)
             {
                 using var db2 = new ProductContext();
@@ -34,10 +53,10 @@ namespace Stx.Controllers
                     db2.Add(p);
                 }
                 db2.SaveChanges();
-            }
-            
-            
-            
+            }*/
+
+
+
         }
     }
 }

@@ -30,15 +30,15 @@ namespace Common
             {
                 //Id = Guid.NewGuid(),
                 
-                Code = "C" + productNumber.ToString().PadLeft(7,'0'),
+                Code = "C" + productNumber.ToString().PadLeft(6,'0'),
                 Active = rnd.Next(2) == 0,
-                Description = "",//RandomProduct.RandomSentences(rnd.Next(5, 10), rnd.Next(3, 10), rnd),
+                //Description = "",//RandomProduct.RandomSentences(rnd.Next(5, 10), rnd.Next(3, 10), rnd),
                 
-                Name = name + " (" + productNumber + ")",
+                Name = name/* + " (" + productNumber + ")"*/,
                 Rating = rnd.Next(1, 5),
                 
-                ReleaseDate = DateTime.SpecifyKind(new DateTime(2000, 01, 01), DateTimeKind.Utc).AddMilliseconds(productNumber * 30).AddHours(productNumber),
-                Type = productNumber % 10 == 3? ProductType.Service: ProductType.Product,
+                ReleaseDate = DateTime.SpecifyKind(new DateTime(1999, 01, 01), DateTimeKind.Utc).AddMilliseconds(productNumber * 30).AddHours(productNumber),
+                //Type = productNumber % 10 == 3? ProductType.Service: ProductType.Product,
             };
             
             if (productNumber % 7 == 6)
@@ -47,30 +47,31 @@ namespace Common
                 p.Rating = null;
             }
             var actualprice = rnd.Next(5000) + 100 + ((productNumber % 10) == 2 ? 0 : 0.1);
-            for (int i = 0;i<1000;i++)
-            {
-                var ph = new ProductHistory()
-                {
-                    ValidFrom = (p.ReleaseDate ?? new DateTime(2000, 01, 01)).AddDays(i),
-                    Code = p.Code,
-                    Active = p.Active,
-                    Name = p.Name,
-                    Rating = p.Rating,
-                    ReleaseDate = p.ReleaseDate,
-                    Type = p.Type,
-                    Description = p.Description,
-                    ProductId = p.Id,
-                    Price = actualprice,
-                };
-                actualprice = actualprice * ((rnd.Next(3) - 1) *0.01 + 1);
-                actualprice = Math.Round(actualprice, 2);
-                p.History.Add(ph);
-            }
-            p.Price = actualprice;
+            
+            p.Price = GenerateProductPriceHistory(productNumber, 1000, productNumber).Price;
             
 
             return p;
 
+        }
+        public static ProductPriceHistory GenerateProductPriceHistory(int productNumber, int priceNumber, int productId)
+        {
+            
+            var rnd = new Random(productNumber);
+            var actualprice = rnd.Next(5000) + 100 + ((productNumber % 10) == 2 ? 0 : 0.1);
+            for (int i = 0; i < priceNumber; i++)
+            {
+                actualprice = actualprice * ((rnd.Next(3) - 1) * 0.01 + 1);
+                actualprice = Math.Round(actualprice, 2);
+            }
+            var pph = new ProductPriceHistory()
+            {
+                ValidFrom = DateTime.SpecifyKind((new DateTime(2000, 01, 01)).AddDays(priceNumber), DateTimeKind.Utc),
+                
+                ProductId = productId,
+                Price = actualprice,
+            };
+            return pph;
         }
         public static string? NumberToProductName(int productNumber, int firstProductNumber, int lastProductNumber)
         {
@@ -83,7 +84,7 @@ namespace Common
             try
             {
                 var firstWord = LongToBase(productNameValue).PadLeft(FirstWordLength, 'a');
-                return FirstCharToUpper(firstWord) + " " + RandomWord(rnd.Next(5) + 3, rnd).ToLower() + " " + RandomWord(rnd.Next(5) + 3, rnd).ToLower();
+                return FirstCharToUpper(firstWord) + " " + RandomWord(rnd.Next(5) + 3, rnd).ToLower();
             } catch
             {
                 return null;

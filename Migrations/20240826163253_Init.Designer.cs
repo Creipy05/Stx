@@ -12,7 +12,7 @@ using Stx.Database;
 namespace Stx.Migrations
 {
     [DbContext(typeof(ProductContext))]
-    [Migration("20240812115534_Init")]
+    [Migration("20240826163253_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -39,12 +39,9 @@ namespace Stx.Migrations
                         .HasColumnName("active");
 
                     b.Property<string>("Code")
-                        .HasColumnType("text")
+                        .HasMaxLength(7)
+                        .HasColumnType("character varying(7)")
                         .HasColumnName("code");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text")
-                        .HasColumnName("description");
 
                     b.Property<string>("Name")
                         .HasColumnType("text")
@@ -62,17 +59,13 @@ namespace Stx.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("releasedate");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("integer")
-                        .HasColumnName("type");
-
                     b.HasKey("Id")
                         .HasName("pk_product");
 
                     b.ToTable("product", (string)null);
                 });
 
-            modelBuilder.Entity("Stx.Models.ProductHistory", b =>
+            modelBuilder.Entity("Stx.Models.ProductPriceHistory", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -80,22 +73,6 @@ namespace Stx.Migrations
                         .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<bool?>("Active")
-                        .HasColumnType("boolean")
-                        .HasColumnName("active");
-
-                    b.Property<string>("Code")
-                        .HasColumnType("text")
-                        .HasColumnName("code");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text")
-                        .HasColumnName("description");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text")
-                        .HasColumnName("name");
 
                     b.Property<double?>("Price")
                         .HasColumnType("double precision")
@@ -105,44 +82,34 @@ namespace Stx.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("productid");
 
-                    b.Property<int?>("Rating")
-                        .HasColumnType("integer")
-                        .HasColumnName("rating");
-
-                    b.Property<DateTime?>("ReleaseDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("releasedate");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("integer")
-                        .HasColumnName("type");
-
                     b.Property<DateTime>("ValidFrom")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("validfrom");
 
                     b.HasKey("Id")
-                        .HasName("pk_producthistory");
+                        .HasName("pk_productpricehistory");
 
                     b.HasIndex("ProductId")
-                        .HasDatabaseName("ix_producthistory_productid");
+                        .HasDatabaseName("ix_productpricehistory_productid");
 
-                    b.ToTable("producthistory", (string)null);
+                    b.ToTable("productpricehistory", (string)null);
                 });
 
-            modelBuilder.Entity("Stx.Models.ProductHistory", b =>
+            modelBuilder.Entity("Stx.Models.ProductPriceHistory", b =>
                 {
-                    b.HasOne("Stx.Models.Product", null)
-                        .WithMany("History")
+                    b.HasOne("Stx.Models.Product", "Product")
+                        .WithMany("PriceHistory")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_producthistory_product_productid");
+                        .HasConstraintName("fk_productpricehistory_product_productid");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Stx.Models.Product", b =>
                 {
-                    b.Navigation("History");
+                    b.Navigation("PriceHistory");
                 });
 #pragma warning restore 612, 618
         }

@@ -18,14 +18,12 @@ namespace Stx.Migrations
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    code = table.Column<string>(type: "text", nullable: true),
+                    code = table.Column<string>(type: "character varying(7)", maxLength: 7, nullable: true),
                     name = table.Column<string>(type: "text", nullable: true),
                     active = table.Column<bool>(type: "boolean", nullable: true),
                     price = table.Column<double>(type: "double precision", nullable: true),
                     releasedate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    rating = table.Column<int>(type: "integer", nullable: true),
-                    type = table.Column<int>(type: "integer", nullable: false),
-                    description = table.Column<string>(type: "text", nullable: true)
+                    rating = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -33,27 +31,20 @@ namespace Stx.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "producthistory",
+                name: "productpricehistory",
                 columns: table => new
                 {
                     id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     validfrom = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     productid = table.Column<int>(type: "integer", nullable: false),
-                    code = table.Column<string>(type: "text", nullable: true),
-                    name = table.Column<string>(type: "text", nullable: true),
-                    active = table.Column<bool>(type: "boolean", nullable: true),
-                    price = table.Column<double>(type: "double precision", nullable: true),
-                    releasedate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    rating = table.Column<int>(type: "integer", nullable: true),
-                    type = table.Column<int>(type: "integer", nullable: false),
-                    description = table.Column<string>(type: "text", nullable: true)
+                    price = table.Column<double>(type: "double precision", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_producthistory", x => x.id);
+                    table.PrimaryKey("pk_productpricehistory", x => x.id);
                     table.ForeignKey(
-                        name: "fk_producthistory_product_productid",
+                        name: "fk_productpricehistory_product_productid",
                         column: x => x.productid,
                         principalTable: "product",
                         principalColumn: "id",
@@ -61,8 +52,8 @@ namespace Stx.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "ix_producthistory_productid",
-                table: "producthistory",
+                name: "ix_productpricehistory_productid",
+                table: "productpricehistory",
                 column: "productid");
         }
 
@@ -70,7 +61,7 @@ namespace Stx.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "producthistory");
+                name: "productpricehistory");
 
             migrationBuilder.DropTable(
                 name: "product");
