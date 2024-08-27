@@ -38,7 +38,9 @@ namespace Stx.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     validfrom = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     productid = table.Column<int>(type: "integer", nullable: false),
-                    price = table.Column<double>(type: "double precision", nullable: true)
+                    price = table.Column<double>(type: "double precision", nullable: true),
+                    pricechange = table.Column<double>(type: "double precision", nullable: true),
+                    pricechangeint = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {

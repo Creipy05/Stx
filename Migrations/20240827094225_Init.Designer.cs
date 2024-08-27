@@ -12,7 +12,7 @@ using Stx.Database;
 namespace Stx.Migrations
 {
     [DbContext(typeof(ProductContext))]
-    [Migration("20240826163253_Init")]
+    [Migration("20240827094225_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -77,6 +77,14 @@ namespace Stx.Migrations
                     b.Property<double?>("Price")
                         .HasColumnType("double precision")
                         .HasColumnName("price");
+
+                    b.Property<double?>("PriceChange")
+                        .HasColumnType("double precision")
+                        .HasColumnName("pricechange");
+
+                    b.Property<int?>("PriceChangeInt")
+                        .HasColumnType("integer")
+                        .HasColumnName("pricechangeint");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("integer")

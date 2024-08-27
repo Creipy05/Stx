@@ -42,6 +42,7 @@ namespace Stx.Controllers
                 db2.SaveChanges();
                     
             }
+            ;
             /*var chunkSize = 2;
             for (int j = 0; j < productCount / chunkSize; j++)
             {

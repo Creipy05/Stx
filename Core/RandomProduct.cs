@@ -59,17 +59,21 @@ namespace Common
             
             var rnd = new Random(productNumber);
             var actualprice = rnd.Next(5000) + 100 + ((productNumber % 10) == 2 ? 0 : 0.1);
+            double? prevprice = null;
             for (int i = 0; i < priceNumber; i++)
             {
+                prevprice = actualprice;
                 actualprice = actualprice * ((rnd.Next(3) - 1) * 0.01 + 1);
                 actualprice = Math.Round(actualprice, 2);
             }
             var pph = new ProductPriceHistory()
             {
                 ValidFrom = DateTime.SpecifyKind((new DateTime(2000, 01, 01)).AddDays(priceNumber), DateTimeKind.Utc),
-                
+                PriceChange = actualprice - prevprice,
+                PriceChangeInt = (int)(Math.Round((double)(actualprice - prevprice))),
                 ProductId = productId,
                 Price = actualprice,
+                //PrevPrice = prevprice,
             };
             return pph;
         }

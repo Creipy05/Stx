@@ -75,6 +75,14 @@ namespace Stx.Migrations
                         .HasColumnType("double precision")
                         .HasColumnName("price");
 
+                    b.Property<double?>("PriceChange")
+                        .HasColumnType("double precision")
+                        .HasColumnName("pricechange");
+
+                    b.Property<int?>("PriceChangeInt")
+                        .HasColumnType("integer")
+                        .HasColumnName("pricechangeint");
+
                     b.Property<int>("ProductId")
                         .HasColumnType("integer")
                         .HasColumnName("productid");
