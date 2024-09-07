@@ -166,15 +166,26 @@ public class TestController : ControllerBase
         var text = await NpgUtil.RunMultirowQueryAsync<string>(query, "random_text");
         return text?.Length;
     }
-
-    [HttpPost("Write")]
+    /*[HttpPost("Write")]
     public async Task<double?> Write(int productcount = 100000)
     {
-        var pphIds = new List<long>();
+       
+        var i = _rnd.Next(productcount * 1000) + 1;
+        
+        var pph = await db.ProductPriceHistory.Where(x => x.Id == i).FirstAsync();
+        pph.PriceChange = pph.PriceChangeInt + 1;
+        
+    }*/
 
-        for (int j = 0; j < 150; j++)
+    [HttpPost("MultiWrite")]
+    public async Task<double?> MultiWrite(int productcount = 100000)
+    {
+        var pphIds = new List<long>();
+        var firstpphId = _rnd.Next(productcount * 1000-2000) + 1;
+        for (int j = 0; j < 333; j++)
         {
-            pphIds.Add(_rnd.Next(productcount * 1000) + 1);
+            pphIds.Add(firstpphId + j * 3);
+            //pphIds.Add(_rnd.Next(productcount * 1000) + 1);
         }
 
         using var db = new ProductContext();
